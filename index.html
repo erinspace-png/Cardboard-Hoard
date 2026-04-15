@@ -1,0 +1,482 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1">&lt;title&gt;Pokémon Card Tracker&lt;/title&gt;</p>
+<p class="p1">&lt;script src="https://unpkg.com/react@18/umd/react.production.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg: #ffffff; --bg2: #f4f4f3; --bg3: #ececea;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--text: #1a1a18; --text2: #6b6b67; --text3: #9b9b97;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--info-bg: #e6f1fb; --info-text: #185fa5; --info-border: #85b7eb;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--success-bg: #eaf3de; --success-bar: #639922;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--danger-text: #a32d2d;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--radius: 8px; --radius-lg: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media (prefers-color-scheme: dark) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--bg: #1e1e1c; --bg2: #2a2a28; --bg3: #343432;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--text: #f0f0ee; --text2: #a0a09c; --text3: #6b6b67;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--info-bg: #0c447c; --info-text: #b5d4f4; --info-border: #378add;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--success-bg: #27500a; --success-bar: #97c459;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--danger-text: #f09595;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg3); color: var(--text); font-size: 16px; line-height: 1.5; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>#app { max-width: 740px; margin: 0 auto; padding: 20px 16px 60px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h1 { font-size: 20px; font-weight: 500; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h3 { font-size: 15px; font-weight: 500; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input, button, select { font-family: inherit; font-size: 14px; color: var(--text); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input[type=text], input[type=search] {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 8px 12px; outline: none; width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input[type=text]:focus, input[type=search]:focus { border-color: var(--info-border); box-shadow: 0 0 0 2px rgba(55,138,221,0.15); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 7px 14px; cursor: pointer; color: var(--text); transition: background 0.15s;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>button:hover { background: var(--bg2); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>button:active { transform: scale(0.98); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--info-border); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pill { display: inline-flex; align-items: center; padding: 5px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid var(--border); background: var(--bg2); color: var(--text); transition: background 0.15s; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pill.active { background: var(--info-bg); color: var(--info-text); border-color: var(--info-border); font-weight: 500; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pill-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.row { display: flex; align-items: center; gap: 10px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--bg2); border-radius: var(--radius); border: 0.5px solid var(--border); margin-bottom: 6px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-item img { width: 40px; height: 56px; object-fit: contain; border-radius: 4px; flex-shrink: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-name { font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-num { font-size: 11px; color: var(--text3); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-price { font-size: 13px; font-weight: 500; text-align: right; flex-shrink: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.no-price { font-size: 12px; color: var(--text3); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.remove-btn { font-size: 11px; color: var(--danger-text); background: none; border: none; cursor: pointer; padding: 2px 0; display: block; margin-top: 3px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tab-bar { display: flex; gap: 2px; border-bottom: 0.5px solid var(--border); margin-bottom: 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tab-btn { background: none; border: none; border-bottom: 2px solid transparent; padding: 9px 14px; font-size: 13px; color: var(--text2); cursor: pointer; border-radius: 0; margin-bottom: -1px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.tab-btn.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.badge { display: inline-block; background: var(--info-bg); color: var(--info-text); border-radius: 10px; padding: 1px 6px; font-size: 11px; margin-left: 5px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-card { background: var(--bg2); border-radius: var(--radius); padding: 14px 16px; border: 0.5px solid var(--border); flex: 1 1 140px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-val { font-size: 22px; font-weight: 500; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.progress-bar { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; margin-top: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.progress-fill { height: 100%; background: var(--success-bar); border-radius: 4px; transition: width 0.3s; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.section-header { display: flex; align-items: center; gap: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); margin-bottom: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.section-name { font-weight: 500; font-size: 15px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.section-meta { margin-left: auto; font-size: 13px; color: var(--text2); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.wishlist-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--info-bg); color: var(--info-text); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.grand-total { background: var(--bg2); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 0.5px solid var(--border); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.total-label { font-size: 12px; color: var(--text2); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.total-val { font-size: 22px; font-weight: 500; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.search-box { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.empty { color: var(--text2); font-size: 14px; padding: 30px 0; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.flex-gap { display: flex; gap: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.logo-circle { width: 36px; height: 36px; border-radius: 50%; background: var(--info-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scrollable { max-height: 500px; overflow-y: auto; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.danger-btn { font-size: 12px; padding: 3px 8px; color: var(--danger-text); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.small-btn { font-size: 12px; padding: 4px 10px; }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;div id="app"&gt;&lt;/div&gt;</p>
+<p class="p1">&lt;script type="text/babel"&gt;</p>
+<p class="p1">const { useState, useEffect, useCallback } = React;</p>
+<p class="p1">const API = "https://api.pokemontcg.io/v2";</p>
+<p class="p2"><br></p>
+<p class="p1">const load = (k, fb) =&gt; { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; } };</p>
+<p class="p1">const save = (k, v) =&gt; { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };</p>
+<p class="p2"><br></p>
+<p class="p1">const fmt = n =&gt; n != null ? `$${Number(n).toFixed(2)}` : null;</p>
+<p class="p1">const getPrice = c =&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>c.tcgplayer?.prices?.holofoil?.market</p>
+<p class="p1"><span class="Apple-converted-space">  </span>|| c.tcgplayer?.prices?.reverseHolofoil?.market</p>
+<p class="p1"><span class="Apple-converted-space">  </span>|| c.tcgplayer?.prices?.normal?.market</p>
+<p class="p1"><span class="Apple-converted-space">  </span>|| c.tcgplayer?.prices?.["1stEditionHolofoil"]?.market</p>
+<p class="p1"><span class="Apple-converted-space">  </span>|| null;</p>
+<p class="p2"><br></p>
+<p class="p1">function CardItem({ card, checked, onCheck, onRemove }) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const price = getPrice(card);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div className="card-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{onCheck !== undefined &amp;&amp; &lt;input type="checkbox" checked={!!checked} onChange={e =&gt; onCheck(e.target.checked)} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{card.images?.small &amp;&amp; &lt;img src={card.images.small} alt={card.name} loading="lazy" /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{flex:1, minWidth:0}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="card-name"&gt;{card.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="card-sub"&gt;{card.set?.name} · {card.rarity || "Unknown"}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{card.number &amp;&amp; &lt;div className="card-num"&gt;#{card.number}/{card.set?.printedTotal || "?"}&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="card-price"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{price ? fmt(price) : &lt;span className="no-price"&gt;No price&lt;/span&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{onRemove &amp;&amp; &lt;button className="remove-btn" onClick={onRemove}&gt;remove&lt;/button&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function CardSearch({ onAdd, placeholder }) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [q, setQ] = useState("");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [results, setResults] = useState([]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [loading, setLoading] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [searched, setSearched] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const search = async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!q.trim()) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setLoading(true); setSearched(true);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const r = await fetch(`${API}/cards?q=name:"${encodeURIComponent(q.trim())}"&amp;pageSize=20`);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const d = await r.json();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setResults(d.data || []);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} catch { setResults([]); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setLoading(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="flex-gap" style={{marginBottom:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" value={q} onChange={e =&gt; setQ(e.target.value)} onKeyDown={e =&gt; e.key==="Enter" &amp;&amp; search()} placeholder={placeholder || "Search cards..."} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onClick={search} style={{flexShrink:0}}&gt;Search&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{loading &amp;&amp; &lt;div className="empty" style={{padding:"10px 0"}}&gt;Searching...&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{searched &amp;&amp; !loading &amp;&amp; results.length === 0 &amp;&amp; &lt;div className="empty" style={{padding:"10px 0"}}&gt;No results found.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style={{maxHeight:340, overflowY:"auto"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{results.map(card =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div key={card.id} className="card-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{card.images?.small &amp;&amp; &lt;img src={card.images.small} alt={card.name} style={{width:36,height:50}} loading="lazy" /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style={{flex:1, minWidth:0}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="card-name" style={{fontSize:13}}&gt;{card.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="card-sub" style={{fontSize:11}}&gt;{card.set?.name} · {card.rarity || "Unknown"}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button className="small-btn" onClick={() =&gt; onAdd(card)}&gt;Add&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function WishlistsTab({ wishlists, setWishlists }) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [active, setActive] = useState(null);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [newName, setNewName] = useState("");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [showCreate, setShowCreate] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [showSearch, setShowSearch] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [renaming, setRenaming] = useState(null);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [renameVal, setRenameVal] = useState("");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const create = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!newName.trim()) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const id = Date.now().toString();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const next = [...wishlists, { id, name: newName.trim(), cards: [] }];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setWishlists(next); setNewName(""); setShowCreate(false); setActive(id);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const del = id =&gt; { setWishlists(wishlists.filter(l =&gt; l.id !== id)); if (active===id) setActive(null); };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const addCard = (listId, card) =&gt; setWishlists(wishlists.map(l =&gt; l.id===listId ? {...l, cards:[...l.cards, card]} : l));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const removeCard = (listId, cardId) =&gt; setWishlists(wishlists.map(l =&gt; l.id===listId ? {...l, cards: l.cards.filter(c=&gt;c.id!==cardId)} : l));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rename = id =&gt; { if (!renameVal.trim()) return; setWishlists(wishlists.map(l =&gt; l.id===id ? {...l, name:renameVal.trim()} : l)); setRenaming(null); };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const cur = wishlists.find(l =&gt; l.id === active);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="pill-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{wishlists.map(l =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span key={l.id} className={`pill${active===l.id?" active":""}`} onClick={() =&gt; { setActive(l.id); setShowSearch(false); }}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{l.name} &lt;span style={{fontSize:11, opacity:0.7, marginLeft:4}}&gt;({l.cards.length})&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onClick={() =&gt; setShowCreate(!showCreate)}&gt;+ New List&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{showCreate &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="flex-gap" style={{marginBottom:16}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;input type="text" value={newName} onChange={e=&gt;setNewName(e.target.value)} onKeyDown={e=&gt;e.key==="Enter"&amp;&amp;create()} placeholder="List name..." /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button onClick={create}&gt;Create&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button onClick={() =&gt; setShowCreate(false)}&gt;Cancel&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{cur &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="row" style={{marginBottom:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{renaming===cur.id ? (</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" value={renameVal} onChange={e=&gt;setRenameVal(e.target.value)} onKeyDown={e=&gt;e.key==="Enter"&amp;&amp;rename(cur.id)} style={{maxWidth:200}} /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onClick={()=&gt;rename(cur.id)}&gt;Save&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onClick={()=&gt;setRenaming(null)}&gt;Cancel&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>) : (</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3&gt;{cur.name}&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button className="small-btn" onClick={()=&gt;{setRenaming(cur.id);setRenameVal(cur.name);}}&gt;Rename&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button className="small-btn danger-btn" onClick={()=&gt;del(cur.id)}&gt;Delete list&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onClick={()=&gt;setShowSearch(!showSearch)} style={{marginLeft:"auto"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{showSearch ? "Hide search" : "+ Add cards"}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{showSearch &amp;&amp; &lt;div className="search-box"&gt;&lt;CardSearch onAdd={card=&gt;addCard(cur.id,card)} placeholder="Search for a card..." /&gt;&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{cur.cards.length===0 &amp;&amp; !showSearch &amp;&amp; &lt;div className="empty"&gt;No cards yet. Click "+ Add cards" to search.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{cur.cards.map((card,i) =&gt; &lt;CardItem key={card.id+i} card={card} onRemove={()=&gt;removeCard(cur.id,card.id)} /&gt;)}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{!cur &amp;&amp; wishlists.length&gt;0 &amp;&amp; &lt;div className="empty"&gt;Select a wishlist above.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{wishlists.length===0 &amp;&amp; !showCreate &amp;&amp; &lt;div className="empty"&gt;No wishlists yet. Create one to get started.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function MasterSetsTab({ masterSets, setMasterSets }) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [active, setActive] = useState(null);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [q, setQ] = useState("");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [setResults, setSetResults] = useState([]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [loadingSet, setLoadingSet] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [loadingCards, setLoadingCards] = useState(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [showSearch, setShowSearch] = useState(false);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const searchSets = async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!q.trim()) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setLoadingSet(true);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const r = await fetch(`${API}/sets?q=name:"${encodeURIComponent(q.trim())}"&amp;pageSize=10`);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const d = await r.json();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setSetResults(d.data || []);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} catch { setSetResults([]); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setLoadingSet(false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const addSet = async (set) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (masterSets.find(s=&gt;s.id===set.id)) { setShowSearch(false); setActive(set.id); return; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setLoadingCards(true);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let all=[], page=1, total=999;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>while (all.length &lt; total) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const r = await fetch(`${API}/cards?q=set.id:${set.id}&amp;pageSize=250&amp;page=${page}`);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const d = await r.json();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>total = d.totalCount;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>all = [...all, ...(d.data||[])];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!(d.data||[]).length) break;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>page++;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>all.sort((a,b)=&gt;(parseInt(a.number)||0)-(parseInt(b.number)||0));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const next = [...masterSets, { id:set.id, name:set.name, logo:set.images?.logo, total:all.length, cards:all, checked:{} }];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setMasterSets(next); setActive(set.id);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} catch {}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setLoadingCards(false); setShowSearch(false); setSetResults([]); setQ("");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const toggle = (setId, cardId, val) =&gt; setMasterSets(masterSets.map(s =&gt; s.id===setId ? {...s, checked:{...s.checked,[cardId]:val}} : s));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const removeSet = id =&gt; { setMasterSets(masterSets.filter(s=&gt;s.id!==id)); if(active===id) setActive(null); };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const cur = masterSets.find(s=&gt;s.id===active);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="pill-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{masterSets.map(s =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>const owned = Object.values(s.checked).filter(Boolean).length;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span key={s.id} className={`pill${active===s.id?" active":""}`} onClick={()=&gt;setActive(s.id)}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{s.name} &lt;span style={{fontSize:11, opacity:0.7, marginLeft:4}}&gt;({owned}/{s.total})&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>})}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onClick={()=&gt;setShowSearch(!showSearch)}&gt;+ Add Set&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{showSearch &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="search-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="flex-gap" style={{marginBottom:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" value={q} onChange={e=&gt;setQ(e.target.value)} onKeyDown={e=&gt;e.key==="Enter"&amp;&amp;searchSets()} placeholder="Search Pokémon sets..." /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onClick={searchSets}&gt;Search&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onClick={()=&gt;{setShowSearch(false);setSetResults([]);}}&gt;Cancel&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{loadingSet &amp;&amp; &lt;div style={{fontSize:14,color:"var(--text2)"}}&gt;Searching...&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{loadingCards &amp;&amp; &lt;div style={{fontSize:14,color:"var(--text2)"}}&gt;Loading all cards... this may take a moment.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{setResults.map(s =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div key={s.id} className="card-item"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{s.images?.logo &amp;&amp; &lt;img src={s.images.logo} alt={s.name} style={{height:28,width:"auto",objectFit:"contain",flexShrink:0}} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{flex:1}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="card-name" style={{fontSize:13}}&gt;{s.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="card-sub" style={{fontSize:11}}&gt;{s.series} · {s.printedTotal||s.total||"?"} cards&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button className="small-btn" onClick={()=&gt;addSet(s)}&gt;Add&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{cur &amp;&amp; (() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const owned = Object.values(cur.checked).filter(Boolean).length;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const pct = cur.total ? Math.round(owned/cur.total*100) : 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="row" style={{marginBottom:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{cur.logo &amp;&amp; &lt;img src={cur.logo} alt={cur.name} style={{height:32,objectFit:"contain"}} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div style={{flex:1}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style={{fontWeight:500,fontSize:15}}&gt;{cur.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style={{fontSize:12,color:"var(--text2)"}}&gt;{owned} / {cur.total} cards ({pct}%)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="progress-bar"&gt;&lt;div className="progress-fill" style={{width:`${pct}%`}} /&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button className="small-btn danger-btn" onClick={()=&gt;removeSet(cur.id)}&gt;Remove set&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="scrollable"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{cur.cards.map(card =&gt; &lt;CardItem key={card.id} card={card} checked={!!cur.checked[card.id]} onCheck={v=&gt;toggle(cur.id,card.id,v)} /&gt;)}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>})()}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{!cur &amp;&amp; masterSets.length&gt;0 &amp;&amp; &lt;div className="empty"&gt;Select a set above.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{masterSets.length===0 &amp;&amp; !showSearch &amp;&amp; &lt;div className="empty"&gt;No master sets yet. Click "+ Add Set" to begin.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function BuyListTab({ wishlists, masterSets, setMasterSets }) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const sections = [];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>masterSets.forEach(s =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const needed = s.cards.filter(c=&gt;!s.checked[c.id]);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (needed.length) sections.push({ id:s.id, name:s.name, logo:s.logo, cards:needed, type:"master" });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>wishlists.forEach(l =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (l.cards.length) sections.push({ id:l.id, name:l.name, logo:null, cards:l.cards, type:"wishlist" });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const grand = sections.reduce((t,s)=&gt;t+s.cards.reduce((st,c)=&gt;st+(getPrice(c)||0),0),0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!sections.length) return &lt;div className="empty"&gt;Your buy list is empty. Add master sets or wishlists to populate it.&lt;/div&gt;;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="grand-total"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;div className="total-label"&gt;Estimated total&lt;/div&gt;&lt;div className="total-val"&gt;{fmt(grand)}&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{textAlign:"right"}}&gt;&lt;div className="total-label"&gt;Cards needed&lt;/div&gt;&lt;div className="total-val"&gt;{sections.reduce((t,s)=&gt;t+s.cards.length,0)}&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{sections.map(sec =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sub = sec.cards.reduce((t,c)=&gt;t+(getPrice(c)||0),0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div key={sec.id} style={{marginBottom:20}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="section-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{sec.logo &amp;&amp; &lt;img src={sec.logo} alt={sec.name} style={{height:22,objectFit:"contain"}} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>{!sec.logo &amp;&amp; &lt;span className="wishlist-tag"&gt;wishlist&lt;/span&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span className="section-name"&gt;{sec.name}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span className="section-meta"&gt;{sec.cards.length} cards · {fmt(sub)}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{sec.cards.map(card =&gt; (</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;CardItem key={card.id} card={card}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checked={sec.type==="master"?false:undefined}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>onCheck={sec.type==="master"?(v)=&gt;setMasterSets(masterSets.map(s=&gt;s.id===sec.id?{...s,checked:{...s.checked,[card.id]:v}}:s)):undefined}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>})}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function StatsTab({ wishlists, masterSets }) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const totalOwned = masterSets.reduce((t,s)=&gt;t+Object.values(s.checked).filter(Boolean).length,0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const totalNeeded = masterSets.reduce((t,s)=&gt;t+s.cards.filter(c=&gt;!s.checked[c.id]).length,0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const wTotal = wishlists.reduce((t,l)=&gt;t+l.cards.length,0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const buyVal = masterSets.reduce((t,s)=&gt;t+s.cards.filter(c=&gt;!s.checked[c.id]).reduce((st,c)=&gt;st+(getPrice(c)||0),0),0)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>+ wishlists.reduce((t,l)=&gt;t+l.cards.reduce((st,c)=&gt;st+(getPrice(c)||0),0),0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="stat-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{[["Cards owned (tracked)",totalOwned],["Cards still needed",totalNeeded],["Wishlist cards",wTotal],["Est. buy list value",fmt(buyVal)||"$0.00"]].map(([l,v])=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div key={l} className="stat-card"&gt;&lt;div className="stat-label"&gt;{l}&lt;/div&gt;&lt;div className="stat-val"&gt;{v}&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{masterSets.length&gt;0 &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3 style={{marginBottom:12}}&gt;Master set progress&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{masterSets.map(s=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const owned=Object.values(s.checked).filter(Boolean).length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const pct=s.total?Math.round(owned/s.total*100):0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div key={s.id} style={{marginBottom:12}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span style={{fontSize:13}}&gt;{s.name}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span style={{fontSize:13,color:"var(--text2)"}}&gt;{owned}/{s.total} ({pct}%)&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="progress-bar"&gt;&lt;div className="progress-fill" style={{width:`${pct}%`}} /&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>})}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{wishlists.length&gt;0 &amp;&amp; (</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style={{marginTop:20}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3 style={{marginBottom:12}}&gt;Wishlists&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{wishlists.map(l=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const val=l.cards.reduce((t,c)=&gt;t+(getPrice(c)||0),0);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div key={l.id} style={{display:"flex",justifyContent:"space-between",padding:"8px 12px",background:"var(--bg2)",borderRadius:8,marginBottom:6,border:"0.5px solid var(--border)"}}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span style={{fontSize:13}}&gt;{l.name}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span style={{fontSize:13,color:"var(--text2)"}}&gt;{l.cards.length} cards · {fmt(val)||"$0.00"}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>})}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{!masterSets.length &amp;&amp; !wishlists.length &amp;&amp; &lt;div className="empty"&gt;No data yet. Add master sets and wishlists to see stats.&lt;/div&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">const TABS = ["Wishlists","Master Sets","Buy List","Stats"];</p>
+<p class="p2"><br></p>
+<p class="p1">function App() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [tab, setTab] = useState(0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [wishlists, setWishlistsRaw] = useState(() =&gt; load("pkm_wishlists", []));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [masterSets, setMasterSetsRaw] = useState(() =&gt; load("pkm_mastersets", []));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const setWishlists = v =&gt; { const next = typeof v==="function"?v(wishlists):v; setWishlistsRaw(next); save("pkm_wishlists",next); };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const setMasterSets = v =&gt; { const next = typeof v==="function"?v(masterSets):v; setMasterSetsRaw(next); save("pkm_mastersets",next); };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="app"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="logo-circle"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;circle cx="12" cy="12" r="10" stroke="#185fa5" strokeWidth="1.5"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;line x1="2" y1="12" x2="22" y2="12" stroke="#185fa5" strokeWidth="1.5"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;circle cx="12" cy="12" r="3" fill="#185fa5"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;Pokémon Card Tracker&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="tab-bar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{TABS.map((t,i)=&gt;(</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button key={t} className={`tab-btn${tab===i?" active":""}`} onClick={()=&gt;setTab(i)}&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{t}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{t==="Wishlists"&amp;&amp;wishlists.length&gt;0&amp;&amp;&lt;span className="badge"&gt;{wishlists.length}&lt;/span&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{t==="Master Sets"&amp;&amp;masterSets.length&gt;0&amp;&amp;&lt;span className="badge"&gt;{masterSets.length}&lt;/span&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>))}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{tab===0 &amp;&amp; &lt;WishlistsTab wishlists={wishlists} setWishlists={setWishlists} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{tab===1 &amp;&amp; &lt;MasterSetsTab masterSets={masterSets} setMasterSets={setMasterSets} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{tab===2 &amp;&amp; &lt;BuyListTab wishlists={wishlists} masterSets={masterSets} setMasterSets={setMasterSets} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{tab===3 &amp;&amp; &lt;StatsTab wishlists={wishlists} masterSets={masterSets} /&gt;}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">ReactDOM.createRoot(document.getElementById("app")).render(&lt;App /&gt;);</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
