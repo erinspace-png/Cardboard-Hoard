@@ -184,8 +184,8 @@ function VariantPill({ label, price, isSynth, checked, onToggle }) {
   return (
     <div className={`variant-pill${checked?" checked":""}`} onClick={onToggle}>
       <input type="checkbox" checked={!!checked} onChange={()=>{}} onClick={e=>e.stopPropagation()} style={{pointerEvents:"none"}} />
-      <span className="vp-label">{label}{isSynth && <span className="synth-badge">no price</span>}</span>
-      <span className="vp-price">{price != null ? fmt(price) : "N/A"}</span>
+      <span className="vp-label">{label}</span>
+      <span className="vp-price">{price != null ? fmt(price) : <span className="synth-badge">no price</span>}</span>
     </div>
   );
 }
@@ -193,14 +193,16 @@ function VariantPill({ label, price, isSynth, checked, onToggle }) {
 // ─── CardGroup — card image + name + variants ─────────────────────────────────
 function CardGroup({ card, variants, renderVariant }) {
   return (
-    <div className="card-group">
-      {card.images?.small && (
-        <img src={card.images.small} alt={card.name} className="card-group-img" loading="lazy" />
-      )}
-      <div className="card-group-info">
-        <div className="card-name" style={{marginBottom:2}}>{card.name}</div>
-        <div className="card-sub" style={{marginBottom:4}}>#{card.number} · {card.rarity||"Unknown"}</div>
-        {variants.map(v => renderVariant(v))}
+    <div style={{marginBottom:10}}>
+      <div className="card-name" style={{marginBottom:1}}>{card.name}</div>
+      <div className="card-sub" style={{marginBottom:6}}>#{card.number} · {card.rarity||"Unknown"}</div>
+      <div className="card-group">
+        {card.images?.small && (
+          <img src={card.images.small} alt={card.name} className="card-group-img" loading="lazy" />
+        )}
+        <div className="card-group-info">
+          {variants.map(v => renderVariant(v))}
+        </div>
       </div>
     </div>
   );
