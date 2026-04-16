@@ -315,34 +315,22 @@ function MasterSetsTab({ masterSets, setMasterSets }) {
         page++;
       }
       all.sort((a,b)=>(parseInt(a.number)||0)-(parseInt(b.number)||0));
-      // Debug: log first card's tcgplayer prices to console
-      if (all.length > 0) {
-        console.log("Sample card (first):", all[0].name, "| tcgplayer prices:", JSON.stringify(all[0].tcgplayer?.prices));
-        const withPokeball = all.filter(c => c.tcgplayer?.prices?.pokeBallReverseHolofoil);
-        console.log("Cards with pokeBallReverseHolofoil BEFORE refetch:", withPokeball.length);
-      }
-      // For cards with only 1 variant from bulk fetch, re-fetch individually to get full price data
+      // For cards with 0-1 price variants from bulk fetch, re-fetch individually to get full price data
       const needsRefetch = all.filter(c => Object.keys(c.tcgplayer?.prices||{}).length <= 1);
-      if (needsRefetch.length > 0) {
-        const chunks = [];
-        for (let i=0; i<needsRefetch.length; i+=20) chunks.push(needsRefetch.slice(i,i+20));
-        for (const chunk of chunks) {
-          const ids = chunk.map(c=>c.id).join(',');
-          try {
-            const r = await fetch(`${API}/cards?q=id:(${ids.replace(/,/g,' OR ')})&pageSize=20`);
-            const d = await r.json();
-            if (d.data) {
-              d.data.forEach(fresh => {
-                const idx = all.findIndex(c=>c.id===fresh.id);
-                if (idx !== -1) all[idx] = fresh;
-              });
-            }
-          } catch {}
-        }
-        const withPokeballAfter = all.filter(c => c.tcgplayer?.prices?.pokeBallReverseHolofoil);
-        console.log("Cards with pokeBallReverseHolofoil AFTER refetch:", withPokeballAfter.length);
-        if (withPokeballAfter.length > 0) console.log("Example:", withPokeballAfter[0].name, JSON.stringify(withPokeballAfter[0].tcgplayer?.prices));
+      console.log("Cards needing refetch:", needsRefetch.length);
+      for (const card of needsRefetch) {
+        try {
+          const r = await fetch(`${API}/cards/${card.id}`);
+          const d = await r.json();
+          if (d.data) {
+            const idx = all.findIndex(c => c.id === card.id);
+            if (idx !== -1) all[idx] = d.data;
+          }
+        } catch {}
       }
+      const withPokeball = all.filter(c => c.tcgplayer?.prices?.pokeBallReverseHolofoil);
+      console.log("Cards with pokeBallReverseHolofoil after refetch:", withPokeball.length);
+      if (withPokeball.length > 0) console.log("Example:", withPokeball[0].name, JSON.stringify(withPokeball[0].tcgplayer?.prices));
       // Expand cards into variants
       const entries = [];
       all.forEach(card => {
