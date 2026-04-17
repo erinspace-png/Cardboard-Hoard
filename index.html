@@ -9,12 +9,12 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="module">
   import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import{getAuth,GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import{getFirestore,doc,getDoc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig={
     apiKey:"AIzaSyDtmoG-P7Q5zXtRi_7XieJhw6h0Okb5vFw",
-    authDomain:"cardbhoard-fd915.firebaseapp.com",
+    authDomain:"erinspace-png.github.io",
     projectId:"cardbhoard-fd915",
     storageBucket:"cardbhoard-fd915.firebasestorage.app",
     messagingSenderId:"727247975940",
@@ -27,7 +27,7 @@
   const provider=new GoogleAuthProvider();
 
   provider.setCustomParameters({prompt:"select_account"});
-  window.__firebase={auth,db,provider,signInWithPopup,signOut,onAuthStateChanged,doc,getDoc,setDoc,onSnapshot};
+  window.__firebase={auth,db,provider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged,doc,getDoc,setDoc,onSnapshot};
 </script>
 <style>
 :root{
@@ -651,24 +651,19 @@ function App(){
   const [ready,setReady]=useState(false);
   const [user,setUser]=useState(null);
   const [authLoading,setAuthLoading]=useState(true);
-  const {auth,provider,signInWithPopup,signOut,onAuthStateChanged}=window.__firebase;
+  const {auth,provider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged}=window.__firebase;
   const {collections,masterSets,updateCollections,updateMasterSets,saving}=useFirestore(user?.uid);
 
   useEffect(()=>{
     const unsub=onAuthStateChanged(auth,u=>{setUser(u);setAuthLoading(false);});
+    getRedirectResult(auth).catch(e=>console.error("Redirect result error:",e));
     loadVariantsData();
     return()=>unsub();
   },[]);
 
   const signIn=async()=>{
-    try{await signInWithPopup(auth,provider);}
-    catch(e){
-      if(e.code==="auth/popup-blocked"){
-        alert("Popup was blocked by your browser. Please allow popups for this site and try again.");
-      } else {
-        console.error(e);
-      }
-    }
+    try{await signInWithRedirect(auth,provider);}
+    catch(e){console.error("Sign in error:",e);}
   };
   const signOutUser=async()=>{try{await signOut(auth);}catch(e){console.error(e);}};
 
