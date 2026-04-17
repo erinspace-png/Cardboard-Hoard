@@ -9,7 +9,7 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="module">
   import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import{getAuth,GoogleAuthProvider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import{getFirestore,doc,getDoc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig={
@@ -26,7 +26,8 @@
   const db=getFirestore(app);
   const provider=new GoogleAuthProvider();
 
-  window.__firebase={auth,db,provider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged,doc,getDoc,setDoc,onSnapshot};
+  provider.setCustomParameters({prompt:"select_account"});
+  window.__firebase={auth,db,provider,signInWithPopup,signOut,onAuthStateChanged,doc,getDoc,setDoc,onSnapshot};
 </script>
 <style>
 :root{
@@ -650,18 +651,25 @@ function App(){
   const [ready,setReady]=useState(false);
   const [user,setUser]=useState(null);
   const [authLoading,setAuthLoading]=useState(true);
-  const {auth,provider,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged}=window.__firebase;
+  const {auth,provider,signInWithPopup,signOut,onAuthStateChanged}=window.__firebase;
   const {collections,masterSets,updateCollections,updateMasterSets,saving}=useFirestore(user?.uid);
 
   useEffect(()=>{
     const unsub=onAuthStateChanged(auth,u=>{setUser(u);setAuthLoading(false);});
-    // Handle redirect result when returning from Google login
-    getRedirectResult(auth).catch(e=>console.error("Redirect error:",e));
     loadVariantsData();
     return()=>unsub();
   },[]);
 
-  const signIn=async()=>{try{await signInWithRedirect(auth,provider);}catch(e){console.error(e);}};
+  const signIn=async()=>{
+    try{await signInWithPopup(auth,provider);}
+    catch(e){
+      if(e.code==="auth/popup-blocked"){
+        alert("Popup was blocked by your browser. Please allow popups for this site and try again.");
+      } else {
+        console.error(e);
+      }
+    }
+  };
   const signOutUser=async()=>{try{await signOut(auth);}catch(e){console.error(e);}};
 
   if(authLoading)return(<div id="root"><div className="content-panel"><div className="empty">Loading...</div></div></div>);
