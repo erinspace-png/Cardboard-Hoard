@@ -114,19 +114,18 @@ button:active{transform:scale(.98);}
 .grid-view > *{max-width:100%;}
 /* Flip card */
 .flip-wrap{perspective:800px;}
-.flip-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1);}
+.flip-inner{position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1);}
 .flip-inner.flipped{transform:rotateY(180deg);}
-.flip-front,.flip-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius-lg);border:0.5px solid var(--border);}
+.flip-front,.flip-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius-lg);border:0.5px solid var(--border);width:100%;}
 .flip-front{background:var(--glass);padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:background .18s,border-color .18s;}
 .flip-front:hover{background:var(--glass-hover);border-color:var(--border-strong);}
 .flip-front.all-owned{opacity:.5;}
-.flip-back{position:absolute;top:0;left:0;width:100%;background:rgba(20,30,55,.97);padding:10px;transform:rotateY(180deg);cursor:default;display:flex;flex-direction:column;gap:4px;min-height:100%;}
+.flip-back{position:absolute;top:0;left:0;background:rgba(20,30,55,.97);padding:10px;transform:rotateY(180deg);display:flex;flex-direction:column;gap:4px;}
 .flip-card-img{width:100%;max-width:100px;height:auto;border-radius:4px;}
 .flip-card-name{font-size:11px;font-weight:500;text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .flip-card-sub{font-size:10px;color:var(--text2);text-align:center;}
 .flip-card-progress{width:100%;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
 .flip-card-progress-fill{height:100%;background:var(--pk-blue);border-radius:2px;}
-.flip-tap-hint{font-size:10px;color:var(--text3);text-align:center;margin-top:2px;}
 /* Grid collection card */
 .grid-coll-card{background:var(--glass);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:10px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:background .18s,border-color .18s;}
 .grid-coll-card.is-owned{background:var(--owned-tint);border-color:var(--owned-border);}
@@ -454,7 +453,7 @@ function MasterSetsTab({masterSets,setMasterSets}){
                     const visVars=hideOwned?g.variants.filter(e=>!cur.checked[e.id]):g.variants;
                     return(
                       <div key={g.cardId} className="list-card-group">
-                        {g.card.images?.small&&<img src={g.card.images.small} alt={g.card.name} className="list-card-img" loading="lazy"/>}
+                        {g.card.images?.small&&<a href={tcgUrl(g.card)} target="_blank" rel="noopener noreferrer"><img src={g.card.images.small} alt={g.card.name} className="list-card-img" loading="lazy"/></a>}
                         <div className="list-card-info">
                           <div style={{display:"flex",alignItems:"baseline",gap:8,marginBottom:1}}>
                             <a href={tcgUrl(g.card)} target="_blank" rel="noopener noreferrer" style={{color:"var(--text)",textDecoration:"underline",textDecorationColor:"var(--text3)",textUnderlineOffset:3}}>
@@ -479,21 +478,24 @@ function MasterSetsTab({masterSets,setMasterSets}){
                     const tot=g.variants.length;
                     const allChecked=checkedCount===tot;
                     const isFlipped=flipped===g.cardId;
+                    // Estimate back height: header ~52px + variants * 34px + check-all btn ~30px + flip btn ~30px + padding
+                    const backH=52+(tot*34)+(allChecked?0:30)+30+20;
                     return(
-                      <div key={g.cardId} className="flip-wrap" style={{position:"relative",minHeight:220}}>
-                        <div className={`flip-inner${isFlipped?" flipped":""}`} style={{position:"absolute",inset:0}}>
+                      <div key={g.cardId} className="flip-wrap" style={{minHeight:backH}}>
+                        <div className={`flip-inner${isFlipped?" flipped":""}`} style={{minHeight:backH}}>
                           {/* Front */}
-                          <div className={`flip-front${allChecked?" all-owned":""}`} style={{height:"100%"}} onClick={()=>setFlipped(isFlipped?null:g.cardId)}>
+                          <div className={`flip-front${allChecked?" all-owned":""}`} style={{minHeight:backH}} onClick={()=>setFlipped(isFlipped?null:g.cardId)}>
                             {g.card.images?.small&&<img src={g.card.images.small} alt={g.card.name} className="flip-card-img" loading="lazy"/>}
-                            <div className="flip-card-name">{g.card.name}</div>
+                            <a href={tcgUrl(g.card)} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{textDecoration:"none",width:"100%"}}>
+                              <div className="flip-card-name" style={{textDecoration:"underline",textDecorationColor:"var(--text3)",textUnderlineOffset:2}}>{g.card.name}</div>
+                            </a>
                             <div className="flip-card-sub">#{g.card.number} · {g.card.rarity}</div>
                             <div className="flip-card-sub">{checkedCount}/{tot} owned</div>
                             <div className="flip-card-progress"><div className="flip-card-progress-fill" style={{width:`${tot?checkedCount/tot*100:0}%`}}/></div>
-                            <div className="flip-tap-hint">Tap to check off</div>
                           </div>
                           {/* Back */}
-                          <div className="flip-back">
-                            <div className="flip-card-name" style={{marginBottom:2}}>{g.card.name}</div>
+                          <div className="flip-back" style={{minHeight:backH}}>
+                            <div className="flip-card-name" style={{marginBottom:1}}>{g.card.name}</div>
                             <div className="flip-card-sub" style={{marginBottom:6}}>#{g.card.number} · {g.card.rarity}</div>
                             {g.variants.map(e=>(
                               <VariantPill key={e.id} label={e.variantLabel} price={e.price} checked={!!cur.checked[e.id]} onToggle={()=>toggleEntry(cur.id,e.id)}/>
